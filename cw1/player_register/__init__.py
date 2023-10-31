@@ -24,17 +24,19 @@ def main(req: HttpRequest) -> HttpResponse:
     match flag:
         case 0:
             try:
-                player = dbHelper.get_player(PlayerContainer, name)
-                if player != None:
-                    return HttpResponse(body=json.dumps({"result": False, "msg": "Username already exists" }))
+                flag = dbHelper.player_exist(PlayerContainer, name)
+                if flag:
+                    body=json.dumps({"result": False, "msg": "Username already exists" })
+                    return HttpResponse(body=body, mimetype="application/json")
+
                 logging.info('Creating new player %s', player.to_dict())
                 PlayerContainer.create_item(player.to_dict(), enable_automatic_id_generation=True)
-                return HttpResponse(body=json.dumps({"result" : True, "msg": "OK" }), mimetype="application/json")
+                body = json.dumps({"result" : True, "msg": "OK" })
             except CosmosHttpResponseError as err:
                 body=json.dumps({"result": False, "msg": "Username already exists" })
         case 1:
             body = json.dumps({"result": False, "msg": "Username less than 4 characters or more than 14 characters"  } )
-            return HttpResponse(body=body, mimetype="application/json")
         case 2:
             body = json.dumps({"result": False, "msg": "Password less than 10 characters or more than 20 characters"  } )
-            return HttpResponse(body=body, mimetype="application/json")
+
+    return HttpResponse(body=body, mimetype="application/json")

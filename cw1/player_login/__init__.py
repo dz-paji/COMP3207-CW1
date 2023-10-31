@@ -20,13 +20,14 @@ def main(req: HttpRequest) -> HttpResponse:
 
     try:
         player = dbHelper.get_player(PlayerContainer, name)
-
-        if player == None:
-            return HttpResponse(body=json.dumps({"result" : False, "msg": "Username or password incorrect" }), mimetype="application/json")
-
         if player['password'] == passwd:
-            return HttpResponse(body=json.dumps({"result" : True, "msg": "OK" }), mimetype="application/json")
+            body=json.dumps({"result" : True, "msg": "OK" })
         else:
-            return HttpResponse(body=json.dumps({"result" : False, "msg": "Username or password incorrect" }), mimetype="application/json")
+            body=json.dumps({"result" : False, "msg": "Username or password incorrect" })
+    
     except CosmosHttpResponseError as err:
-        return HttpResponse(body=json.dumps({"result" : False, "msg": "Username or password incorrect" }), mimetype="application/json")
+        body=json.dumps({"result" : False, "msg": "Username or password incorrect" })
+    except dbHelper.PlayerNotFoundException as err:
+        body=json.dumps({"result" : False, "msg": "Username or password incorrect" })
+        
+    return HttpResponse(body = body, mimetype="application/json")
