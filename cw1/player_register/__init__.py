@@ -1,6 +1,7 @@
 import logging
 import os
 from shared.Player import Player
+import shared.dbHelper as dbHelper
 import json
 
 from azure.functions import HttpRequest, HttpResponse
@@ -23,6 +24,9 @@ def main(req: HttpRequest) -> HttpResponse:
     match flag:
         case 0:
             try:
+                player = dbHelper.get_player(PlayerContainer, name)
+                if player != None:
+                    return HttpResponse(body=json.dumps({"result": False, "msg": "Username already exists" }))
                 logging.info('Creating new player %s', player.to_dict())
                 PlayerContainer.create_item(player.to_dict(), enable_automatic_id_generation=True)
                 return HttpResponse(body=json.dumps({"result" : True, "msg": "OK" }), mimetype="application/json")

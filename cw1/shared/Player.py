@@ -20,5 +20,4 @@ class Player:
         return 0
 
     def to_dict(self):
-        return { "id": self.id, "username": self.name, "password": self.passwd, "games_played": self.games_played, "total_score": self.score}
-
+        return {"username": self.name, "password": self.passwd, "games_played": self.games_played, "total_score": self.score}
