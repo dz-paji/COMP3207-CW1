@@ -21,3 +21,12 @@ class Player:
 
     def to_dict(self):
         return {"username": self.name, "password": self.passwd, "games_played": self.games_played, "total_score": self.score}
+
+    def from_dict(self, resp):
+        self.id = resp["id"]
+        self.name = resp["username"]
+        self.passwd = resp["password"]
+        self.games_played = resp["games_played"]
+        self.score = resp["total_score"]
+
+        return self
