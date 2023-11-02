@@ -1,4 +1,5 @@
-import Player
+import logging
+from shared.Player import Player
 
 class PlayerNotFoundException(Exception):
     pass
@@ -37,6 +38,7 @@ def player_exist(container, username):
 def update_player(container, player):
     ''' update player
     '''
+    logging.info(f"Updating player {player.to_dict()}")
     resp = container.upsert_item(player.to_dict())
     resp_player = Player("a","b")
     return resp_player.from_dict(resp)

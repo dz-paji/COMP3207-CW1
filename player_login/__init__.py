@@ -20,7 +20,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
     try:
         player = dbHelper.get_player(PlayerContainer, name)
-        if player['password'] == passwd:
+        if player.passwd == passwd:
             body=json.dumps({"result" : True, "msg": "OK" })
         else:
             body=json.dumps({"result" : False, "msg": "Username or password incorrect" })

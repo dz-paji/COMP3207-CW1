@@ -5,7 +5,10 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "AzureCosmosDBConnectionString": "AccountEndpoint=https://cw1-db.documents.azure.com:443/;AccountKey=MXjlZezCssIoUBHA3Rx8FhZvHgkbsDshLLJOSAfmHTAoa0dLItIL7Il4WfeEgxMlydg8eTeJ7MkdACDbNhH2Jw==;",
     "DatabaseName" : "cw1",
-    "PlayerContainerName" : "cw1-players"
-
+    "PlayerContainerName" : "cw1-players",
+    "PromptContainerName": "prompt",
+    "AzureTextTranslationKey": "df592f7053b54d74a1f50a3e36ca21bc",
+    "AzureTextTranslationRegion": "uksouth",
+    "AzureTextTranslationEndpoint": "https://cw1-zq4g21-translator.cognitiveservices.azure.com/"
   }
 }
