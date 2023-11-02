@@ -1,0 +1,11 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureCosmosDBConnectionString": "AccountEndpoint=https://cw1-db.documents.azure.com:443/;AccountKey=MXjlZezCssIoUBHA3Rx8FhZvHgkbsDshLLJOSAfmHTAoa0dLItIL7Il4WfeEgxMlydg8eTeJ7MkdACDbNhH2Jw==;",
+    "DatabaseName" : "cw1",
+    "PlayerContainerName" : "cw1-players"
+
+  }
+}
