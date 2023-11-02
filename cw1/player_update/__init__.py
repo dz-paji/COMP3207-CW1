@@ -1,6 +1,7 @@
 import logging
 import os
 import shared.dbHelper as dbHelper
+import json
 
 from azure.functions import HttpRequest, HttpResponse
 from azure.cosmos import CosmosClient
@@ -20,21 +21,10 @@ def main(req: HttpRequest) -> HttpResponse:
     if (dbHelper.player_exist(PlayerContainer, name) == False):
         body = json.dumps({"result": False, "msg": "Username does not exist" })
         return HttpResponse(body=body, mimetype="application/json")
-
-
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
-
-    if name:
-        return HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
-        return HttpResponse(
-            "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-            status_code=200
-        )
+    
+    player = dbHelper.get_player(PlayerContainer, name)
+    player.games_played += add_game_played
+    player.score += add_score
+    dbHelper.update_player(PlayerContainer, player)
+    body = json.dumps({"result": True , "msg" : "OK"})
+    return HttpResponse(body=body, mimetype="application/json")
