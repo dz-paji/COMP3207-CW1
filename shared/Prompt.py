@@ -14,4 +14,4 @@ class Prompt:
         return self
     
     def to_dict(self):
-        return {"id": self.id, "name": self.name, "texts": self.texts}
+        return {"id": self.id, "username": self.name, "texts": self.texts}

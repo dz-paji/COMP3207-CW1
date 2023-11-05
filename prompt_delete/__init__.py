@@ -1,5 +1,6 @@
 import logging
 import os
+import json
 
 from shared.Prompt import Prompt
 
@@ -13,21 +14,35 @@ PlayerDB = ThisCosmos.get_database_client(os.environ['DatabaseName'])
 PlayerContainer = PlayerDB.get_container_client(os.environ['PlayerContainerName'])
 PromotContainer = PlayerDB.get_container_client(os.environ['PromptContainerName'])
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
-
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
-
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
+    logging.info('New prompt delete request')
+    req_body = req.get_json()
+    
+    if "player" in req_body:
+        name = req_body.get("player")
+        i = 0;
+        for prompt in PromotContainer.query_items(
+            query=f"SELECT * FROM prompts WHERE prompts.username = '{name}'",
+            enable_cross_partition_query=True
+        ):
+            PromotContainer.delete_item(prompt, partition_key='username')
+            i = i + 1
+            
+        body = ({"result": True, "msg": " %s prompts deleted"}, i)
+        
+    elif "word" in req_body:
+        word = req_body.get("word")
+        i = 0;
+        
+        for prompt in PromotContainer.query_items(
+            query=f"SELECT * FROM prompts WHERE ARRAY_CONTAINS(prompts.texts, {{'text': '{word}'}}, true)",
+            enable_cross_partition_query=True
+        ):
+            print(prompt)
+        
     else:
         return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
+             "Unexpected content",
+             status_code=401
         )
+    
+    return func.HttpResponse(body=json.dumps(body), status_code=200)
