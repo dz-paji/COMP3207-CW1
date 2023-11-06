@@ -24,21 +24,32 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             query=f"SELECT * FROM prompts WHERE prompts.username = '{name}'",
             enable_cross_partition_query=True
         ):
-            PromotContainer.delete_item(prompt, partition_key='username')
+            print(prompt.get("id"))
+            PromotContainer.delete_item(prompt.get("id"), partition_key=prompt.get("username"))
             i = i + 1
             
-        body = ({"result": True, "msg": " %s prompts deleted"}, i)
-        
+        msg = (f"{i} prompts deleted")
+        body = ({"result": True, "msg": msg})
     elif "word" in req_body:
         word = req_body.get("word")
         i = 0;
         
         for prompt in PromotContainer.query_items(
-            query=f"SELECT * FROM prompts WHERE ARRAY_CONTAINS(prompts.texts, {{'text': '{word}'}}, true)",
+            query=f"SELECT * FROM prompts",
             enable_cross_partition_query=True
         ):
-            print(prompt)
+            prompt_obj = Prompt("1", "1", "1")
+            prompt_obj.from_dict(prompt)
+            for x in prompt_obj.get_en():
+                print(x)
+                if x.lower() == word.lower():
+                    PromotContainer.delete_item(prompt_obj.id, partition_key=prompt_obj.name)
+                    i = i + 1
+                    break
+
         
+        msg = (f"{i} prompts deleted")
+        body = ({"result": True, "msg": msg})
     else:
         return func.HttpResponse(
              "Unexpected content",

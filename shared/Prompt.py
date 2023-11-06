@@ -15,3 +15,21 @@ class Prompt:
     
     def to_dict(self):
         return {"id": self.id, "username": self.name, "texts": self.texts}
+    
+    def from_dict(self, prompt):
+        self.id = prompt["id"]
+        self.name = prompt["username"]
+        self.texts = prompt["texts"]
+        
+        return self
+    
+    def get_en(self):
+        text = ""
+        for i in self.texts:
+            if i["language"] == "en":
+                text = i["text"]
+                break
+            
+        text = text.split(" ")
+            
+        return text
