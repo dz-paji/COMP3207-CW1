@@ -4,11 +4,13 @@
     "FUNCTIONS_WORKER_RUNTIME": "python",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "AzureCosmosDBConnectionString": "AccountEndpoint=https://cw1-zq4g21.documents.azure.com:443/;AccountKey=eovPXxmLdJOACkZtlIrdacaUS6S111RCUuZnI00K9tXPNn5Ni3WJ7xyvYRP0p5b5P9g95EI8Anz1ACDbx6XLvw==;",
-    "DatabaseName" : "quiplash",
-    "PlayerContainerName" : "player",
-    "PromptContainerName": "prompt",
-    "AzureTextTranslationKey": "df592f7053b54d74a1f50a3e36ca21bc",
+    "Database" : "quiplash",
+    "PlayerContainer" : "player",
+    "PromptContainer" : "prompt",
+    "DeploymentURL" : "https://cw1-zq.azurewebsites.net",
+    "FunctionAppKey" : "-vptnOIsfKusYRUE2V-uB-8MHl1M0e-u-8_KLE57JHlmAzFuQTnHsg==",
+    "TranslationEndpoint": "https://cw1-zq4g21-translator.cognitiveservices.azure.com/" ,
     "AzureTextTranslationRegion": "uksouth",
-    "AzureTextTranslationEndpoint": "https://cw1-zq4g21-translator.cognitiveservices.azure.com/"
+    "TranslationKey": "df592f7053b54d74a1f50a3e36ca21bc"    
   }
 }

@@ -1,9 +1,9 @@
 import logging
 import os
 import json
-import shared.dbHelper as dbHelper
+import shared_code.dbHelper as dbHelper
 
-from shared.Prompt import Prompt
+from shared_code.Prompt import Prompt
 from azure.functions import HttpRequest, HttpResponse
 from azure.core.rest import HttpRequest as RestRequest
 from azure.core.rest import HttpResponse as RestResponse
@@ -14,12 +14,12 @@ from azure.cosmos.exceptions import CosmosHttpResponseError, CosmosResourceExist
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('prompt_create')
-credentials = TranslatorCredential(os.environ['AzureTextTranslationKey'], os.environ['AzureTextTranslationRegion'])
-Translator = TextTranslationClient(endpoint=os.environ['AzureTextTranslationEndpoint'], credential=credentials, logging_enable=False)
+credentials = TranslatorCredential(os.environ['TranslationKey'], os.environ['AzureTextTranslationRegion'])
+Translator = TextTranslationClient(endpoint=os.environ['TranslationEndpoint'], credential=credentials, logging_enable=False)
 ThisCosmos = CosmosClient.from_connection_string(os.environ['AzureCosmosDBConnectionString'])
-CwDB = ThisCosmos.get_database_client(os.environ['DatabaseName'])
-PlayerContainer = CwDB.get_container_client(os.environ['PlayerContainerName'])
-PromotContainer = CwDB.get_container_client(os.environ['PromptContainerName'])
+CwDB = ThisCosmos.get_database_client(os.environ['Database'])
+PlayerContainer = CwDB.get_container_client(os.environ['PlayerContainer'])
+PromotContainer = CwDB.get_container_client(os.environ['PromptContainer'])
 target_lang = ["en", "es", "it", "sv", "ru", "id", "bg", "zh-Hans"]
 
 def main(req: HttpRequest) -> HttpResponse:

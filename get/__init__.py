@@ -1,18 +1,18 @@
 import logging
 import os
 import json
-import shared.dbHelper as dbHelper
+import shared_code.dbHelper as dbHelper
 
-from shared.Prompt import Prompt
-from shared.Player import Player
+from shared_code.Prompt import Prompt
+from shared_code.Player import Player
 from azure.functions import HttpRequest, HttpResponse
 from azure.cosmos import CosmosClient
 from azure.cosmos.exceptions import CosmosHttpResponseError, CosmosResourceExistsError, CosmosResourceNotFoundError
 
 ThisCosmos = CosmosClient.from_connection_string(os.environ['AzureCosmosDBConnectionString'])
-PlayerDB = ThisCosmos.get_database_client(os.environ['DatabaseName'])
-PlayerContainer = PlayerDB.get_container_client(os.environ['PlayerContainerName'])
-PromotContainer = PlayerDB.get_container_client(os.environ['PromptContainerName'])
+PlayerDB = ThisCosmos.get_database_client(os.environ['Database'])
+PlayerContainer = PlayerDB.get_container_client(os.environ['PlayerContainer'])
+PromotContainer = PlayerDB.get_container_client(os.environ['PromptContainer'])
 
 def main(req: HttpRequest) -> HttpResponse:
     logging.info('New util get request')

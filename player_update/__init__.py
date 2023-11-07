@@ -1,6 +1,6 @@
 import logging
 import os
-import shared.dbHelper as dbHelper
+import shared_code.dbHelper as dbHelper
 import json
 
 from azure.functions import HttpRequest, HttpResponse
@@ -8,8 +8,8 @@ from azure.cosmos import CosmosClient
 from azure.cosmos.exceptions import CosmosHttpResponseError, CosmosResourceExistsError, CosmosResourceNotFoundError
 
 ThisCosmos = CosmosClient.from_connection_string(os.environ['AzureCosmosDBConnectionString'])
-PlayerDB = ThisCosmos.get_database_client(os.environ['DatabaseName'])
-PlayerContainer = PlayerDB.get_container_client(os.environ['PlayerContainerName'])
+PlayerDB = ThisCosmos.get_database_client(os.environ['Database'])
+PlayerContainer = PlayerDB.get_container_client(os.environ['PlayerContainer'])
 
 def main(req: HttpRequest) -> HttpResponse:
     req_body = req.get_json()

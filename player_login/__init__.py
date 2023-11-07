@@ -1,7 +1,7 @@
 import logging
 import os
-from shared.Player import Player
-import shared.dbHelper as dbHelper
+from shared_code.Player import Player
+import shared_code.dbHelper as dbHelper
 import json
 
 from azure.functions import HttpRequest, HttpResponse
@@ -9,8 +9,8 @@ from azure.cosmos import CosmosClient
 from azure.cosmos.exceptions import CosmosHttpResponseError, CosmosResourceExistsError, CosmosResourceNotFoundError
 
 ThisCosmos = CosmosClient.from_connection_string(os.environ['AzureCosmosDBConnectionString'])
-PlayerDB = ThisCosmos.get_database_client(os.environ['DatabaseName'])
-PlayerContainer = PlayerDB.get_container_client(os.environ['PlayerContainerName'])
+PlayerDB = ThisCosmos.get_database_client(os.environ['Database'])
+PlayerContainer = PlayerDB.get_container_client(os.environ['PlayerContainer'])
 
 def main(req: HttpRequest) -> HttpResponse:
     logging.info('New login request. %s', req.get_json())

@@ -1,5 +1,5 @@
 import logging
-from shared.Player import Player
+from shared_code.Player import Player
 
 class PlayerNotFoundException(Exception):
     pass

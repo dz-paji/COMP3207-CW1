@@ -2,16 +2,16 @@ import logging
 import os
 import json
 
-from shared.Prompt import Prompt
+from shared_code.Prompt import Prompt
 
 from azure.functions import HttpRequest, HttpResponse
 from azure.cosmos import CosmosClient
 from azure.cosmos.exceptions import CosmosHttpResponseError, CosmosResourceExistsError, CosmosResourceNotFoundError
 
 ThisCosmos = CosmosClient.from_connection_string(os.environ['AzureCosmosDBConnectionString'])
-PlayerDB = ThisCosmos.get_database_client(os.environ['DatabaseName'])
-PlayerContainer = PlayerDB.get_container_client(os.environ['PlayerContainerName'])
-PromotContainer = PlayerDB.get_container_client(os.environ['PromptContainerName'])
+PlayerDB = ThisCosmos.get_database_client(os.environ['Database'])
+PlayerContainer = PlayerDB.get_container_client(os.environ['PlayerContainer'])
+PromotContainer = PlayerDB.get_container_client(os.environ['PromptContainer'])
 def main(req: HttpRequest) -> HttpResponse:
     logging.info('New prompt delete request')
     req_body = req.get_json()
