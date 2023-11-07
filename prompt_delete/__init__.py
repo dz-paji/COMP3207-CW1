@@ -4,7 +4,6 @@ import json
 
 from shared.Prompt import Prompt
 
-import azure.functions as func
 from azure.functions import HttpRequest, HttpResponse
 from azure.cosmos import CosmosClient
 from azure.cosmos.exceptions import CosmosHttpResponseError, CosmosResourceExistsError, CosmosResourceNotFoundError
@@ -13,7 +12,7 @@ ThisCosmos = CosmosClient.from_connection_string(os.environ['AzureCosmosDBConnec
 PlayerDB = ThisCosmos.get_database_client(os.environ['DatabaseName'])
 PlayerContainer = PlayerDB.get_container_client(os.environ['PlayerContainerName'])
 PromotContainer = PlayerDB.get_container_client(os.environ['PromptContainerName'])
-def main(req: func.HttpRequest) -> func.HttpResponse:
+def main(req: HttpRequest) -> HttpResponse:
     logging.info('New prompt delete request')
     req_body = req.get_json()
     
@@ -51,9 +50,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         msg = (f"{i} prompts deleted")
         body = ({"result": True, "msg": msg})
     else:
-        return func.HttpResponse(
+        return HttpResponse(
              "Unexpected content",
              status_code=401
         )
     
-    return func.HttpResponse(body=json.dumps(body), status_code=200)
+    return HttpResponse(body=json.dumps(body), status_code=200)

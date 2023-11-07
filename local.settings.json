@@ -3,9 +3,9 @@
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "python",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "AzureCosmosDBConnectionString": "AccountEndpoint=https://cw1-db.documents.azure.com:443/;AccountKey=MXjlZezCssIoUBHA3Rx8FhZvHgkbsDshLLJOSAfmHTAoa0dLItIL7Il4WfeEgxMlydg8eTeJ7MkdACDbNhH2Jw==;",
-    "DatabaseName" : "cw1",
-    "PlayerContainerName" : "cw1-players",
+    "AzureCosmosDBConnectionString": "AccountEndpoint=https://cw1-zq4g21.documents.azure.com:443/;AccountKey=eovPXxmLdJOACkZtlIrdacaUS6S111RCUuZnI00K9tXPNn5Ni3WJ7xyvYRP0p5b5P9g95EI8Anz1ACDbx6XLvw==;",
+    "DatabaseName" : "quiplash",
+    "PlayerContainerName" : "player",
     "PromptContainerName": "prompt",
     "AzureTextTranslationKey": "df592f7053b54d74a1f50a3e36ca21bc",
     "AzureTextTranslationRegion": "uksouth",

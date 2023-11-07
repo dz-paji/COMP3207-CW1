@@ -12,9 +12,10 @@ from azure.ai.translation.text.models import InputTextItem
 from azure.cosmos import CosmosClient
 from azure.cosmos.exceptions import CosmosHttpResponseError, CosmosResourceExistsError, CosmosResourceNotFoundError
 
-
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('prompt_create')
 credentials = TranslatorCredential(os.environ['AzureTextTranslationKey'], os.environ['AzureTextTranslationRegion'])
-Translator = TextTranslationClient(endpoint=os.environ['AzureTextTranslationEndpoint'], credential=credentials, logging_enable=True)
+Translator = TextTranslationClient(endpoint=os.environ['AzureTextTranslationEndpoint'], credential=credentials, logging_enable=False)
 ThisCosmos = CosmosClient.from_connection_string(os.environ['AzureCosmosDBConnectionString'])
 CwDB = ThisCosmos.get_database_client(os.environ['DatabaseName'])
 PlayerContainer = CwDB.get_container_client(os.environ['PlayerContainerName'])
@@ -23,7 +24,7 @@ target_lang = ["en", "es", "it", "sv", "ru", "id", "bg", "zh-Hans"]
 
 def main(req: HttpRequest) -> HttpResponse:
     req_body = req.get_json()
-    logging.info('New prompt creation request. %s', req_body)
+    logger.info('New prompt creation request. %s', req_body)
     
     # validate user
     name = req_body.get('username')
@@ -47,24 +48,27 @@ def main(req: HttpRequest) -> HttpResponse:
         )
     resp = Translator.send_request(request=get_src_lang_req)
     resp_json = resp.json()
-    logging.info(resp_json)
+    logger.info(resp_json)
     confidence = resp_json[0]["score"]
     src_lang = resp_json[0]["language"]
+    logger.info("detected language %s of confidence %s", src_lang, confidence)
     
     if (confidence < 0.3) or (src_lang not in target_lang):
+        logger.info("confidence is low: %s", confidence < 0.3)
+        logger.info("src_lang is not in target_lang: %s", src_lang not in target_lang)
         body = json.dumps({"result": False, "msg": "Unsupported language"})
         return HttpResponse(body=body, mimetype="application/json")
     
-    target_lang.remove(src_lang)
+    trans_langs = target_lang.copy()
+    trans_langs.remove(src_lang)
     
     input_text = [InputTextItem(text=text)]
-    response = Translator.translate(content=input_text, to=target_lang, from_parameter=src_lang)
+    response = Translator.translate(content=input_text, to=trans_langs, from_parameter=src_lang)
     
     this_prompt = Prompt(name, src_lang, text)
     this_prompt.from_json(response[0].get("translations"))
-    logging.info("New prompt object %s: ",this_prompt)
     
     PromotContainer.create_item(this_prompt.to_dict(), enable_automatic_id_generation=True)
     
 
-    return HttpResponse(body=json.dumps({"result" : True, "msg": "OK" }), mimetype="application/json")
+    return HttpResponse(body=json.dumps({"result" : True, "msg": "OK" }), mimetype="application/json")    
